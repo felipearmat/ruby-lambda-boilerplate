@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  base-lambda
+
+  Sample SAM Template for base-lambda
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 15
+    Tracing: Active
+    Handler: app.LambdaHandler.handle
+    Architectures:
+      - x86_64
+    Layers:
+      - !Ref ProcessorLibLayerDev
+    DeadLetterQueue:
+      Type: SQS
+      TargetArn: !Sub arn:aws:sqs:${AWS::Region}:${LAMBDA_ID}:ProcessorDeadLetterQueue
+    Environment:
+      Variables:
+        STACK_NAME: BaseProcessorDev
+        S3_BUCKET: s3-bucket
+        S3_PREFIX: s3-prefix
+        REPORT_GROUP: processor-coverage-report-dev
+        LAMBDA_GID: a0a0a0a0
+        LAMBDA_ID: 000000000000
+        ENVIRONMENT: "local"
+        PROCESSOR_URL: !Sub "https://${LAMBDA_GID}.execute-api.${AWS::Region}.amazonaws.com/"
+        PROCESSOR_USERNAME: "USERNAME"
+        PROCESSOR_PASSWORD: "PASSWORD"
+
+Resources:
+  ProcessorLibLayerDev:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: ProcessorLibLayerDev
+      ContentUri: shared/
+      CompatibleRuntimes:
+        - ruby2.7
+      RetentionPolicy: Delete
+    Metadata:
+      BuildMethod: makefile
+
+  GenericFunctionDev:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      PackageType: Image
+      Role: !GetAtt GenericFunctionDev.Role
+    Metadata:
+      DockerTag: base_processor
+      DockerContext: ./
+      Dockerfile: shared/Dockerfile
+      DockerBuildArgs:
+        FUNCTION_FOLDER: functions/generic

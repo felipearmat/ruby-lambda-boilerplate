@@ -1,0 +1,35 @@
+source "https://rubygems.org"
+
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+ruby '~> 2.7.0'
+
+gem "httparty"
+
+# AWS
+gem 'aws-xray-sdk'
+gem 'aws-sdk-ssm'
+gem 'aws-sdk-sqs'
+gem 'aws-sdk-core'
+gem 'aws-sdk-lambda'
+gem 'aws-sdk-s3'
+gem 'aws-sdk-sts'
+
+# MongoDB
+gem 'mongo'
+
+# Rails goodies on plain Ruby
+gem 'activesupport'
+
+group :development, :test do
+  gem 'brakeman'
+  gem 'reek', require: false
+  gem 'timecop'
+  gem 'parallel_tests'
+  gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'simplecov', require: false
+end
