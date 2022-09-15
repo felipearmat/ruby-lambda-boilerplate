@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/ruby:2.7 as final
+FROM public.ecr.aws/lambda/ruby:2.7
 
 # Install system build dependencies
 RUN yum install -y make
@@ -7,22 +7,27 @@ RUN yum install -y amazon-linux-extras
 RUN amazon-linux-extras enable postgresql14
 RUN yum install -y postgresql-devel
 
-ENV LAYER_FOLDER=shared
+# Receive the arg LAYER_FOLDER from template.yaml, defaults to 'shared'
+ARG LAYER_FOLDER=shared
 
-ADD ${LAYER_FOLDER}/Gemfile .
-
+# Add Gemfile and install gems
+ADD ${LAYER_FOLDER}/Gemfile ${LAMBDA_TASK_ROOT}
 RUN bundle install
 
-# ADD functions functions
-ADD ${LAYER_FOLDER} ./
+# Add layer folder to lambda runtime lib folder
+ADD ${LAYER_FOLDER} ${LAMBDA_RUNTIME_DIR}/lib
 
+# Receive the arg FUNCTION_FOLDER from template.yaml, defaults to 'functions'
 ARG FUNCTION_FOLDER=functions
-ADD ${FUNCTION_FOLDER} ./
 
-RUN mkdir /opt/ruby && cd /opt/ruby && ln -s ./${LAYER_FOLDER} lib
+# Add function folder to lambda task folder
+ADD ${FUNCTION_FOLDER} ${LAMBDA_TASK_ROOT}
 
-# ADD spec spec
-ADD template_dev.yaml .
+# Receive the arg TEMPLATE from template.yaml, defaults to template_dev.yaml
+ARG TEMPLATE=template_dev.yaml
+
+# Add template to lambda task folder
+ADD ${TEMPLATE} ${LAMBDA_TASK_ROOT}
 
 # Command can be overwritten by providing a different command in the template directly.
 CMD ["app.LambdaHandler.handle"]

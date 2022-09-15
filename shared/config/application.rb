@@ -3,7 +3,7 @@
 load_paths = Dir[
   '/opt/ruby/gems/2.7.0/gems/**/lib',
   '/opt/ruby/gems/2.7.0/bundler/gems/**/lib',
-  '/opt/ruby/lib'
+  '/opt/lib'
 ]
 $LOAD_PATH.unshift(*load_paths)
 
