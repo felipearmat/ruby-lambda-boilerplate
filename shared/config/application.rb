@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-load_paths = Dir[
-  '/opt/ruby/gems/2.7.0/gems/**/lib',
-  '/opt/ruby/gems/2.7.0/bundler/gems/**/lib',
-  '/opt/lib'
-]
-$LOAD_PATH.unshift(*load_paths)
-
 require 'aws-sdk-ssm'
 
 if ENV.fetch('ENVIRONMENT', 'local') != 'local' && ENV.fetch('DISABLE_LOG', 'false') == 'false'
