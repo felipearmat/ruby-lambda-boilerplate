@@ -1,0 +1,40 @@
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
+/tmp
+
+#ignore bybug files
+.byebug_history
+
+#ignore openoffice locks
+**/*/.~lock.*
+
+#ignore aws-sam artifacts
+.aws-sam*
+
+# Ignore Sublime files
+*.sublime-*
+
+# Ignore RubyMine files
+.idea/
+
+#ignore redis dump
+dump.rdb
+
+#ignore packs
+/public/packs
+/public/packs-test
+
+#yarn stuff
+/node_modules
+yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+spec/e2e/node_modules
+spec/e2e/cypress.env.json
+spec/e2e/cypress/videos
+spec/e2e/cypress/screenshots
+cypress.env.json
+cypress/
+
+.git
