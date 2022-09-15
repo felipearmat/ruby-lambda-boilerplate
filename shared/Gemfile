@@ -1,12 +1,8 @@
-source "https://rubygems.org"
-
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
 
 ruby '~> 2.7.0'
-
-gem "httparty"
 
 # AWS
 gem 'aws-xray-sdk'
@@ -17,19 +13,37 @@ gem 'aws-sdk-lambda'
 gem 'aws-sdk-s3'
 gem 'aws-sdk-sts'
 
-# MongoDB
-gem 'mongo'
+# Ruby ODM framework for MongoDB http://www.mongoid.org
+gem 'mongoid'
+# MongoId Autoinc
+gem 'mongoid-autoinc', require: ['autoinc']
+# Mongoid Enumberable
+gem 'mongoid_enumerable'
+# Multi-user non-linear history tracking, auditing, undo, redo for mongoid.
+gem 'mongoid-history'
+gem 'mongoid_paranoia'
 
 # Rails goodies on plain Ruby
 gem 'activesupport'
 
 group :development, :test do
   gem 'brakeman'
-  gem 'reek', require: false
-  gem 'timecop'
   gem 'parallel_tests'
-  gem 'rubocop', require: false
-  gem 'rubocop-performance', require: false
-  gem 'rubocop-rspec', require: false
   gem 'simplecov', require: false
+
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'rspec-collection_matchers' # More matchers
+  # RSpec matchers and macros for Mongoid.
+  gem 'mongoid-rspec'
+  # Ruby code quality scanner
+  gem 'rubocop', require: false
+  # Integration with RSpec
+  gem 'rubocop-rspec', require: false
+  # rubocop performance cops
+  gem 'rubocop-performance'
+  # Yet Another code quality scanner
+  gem 'reek'
+  # Ability to freeze time itself
+  gem 'timecop'
 end

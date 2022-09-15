@@ -1,10 +1,9 @@
 # require 'httparty'
 require 'json'
+require 'config/application'
 
 class LambdaHandler
   def self.handle(event:, context:)
-    # Sample pure Lambda function
-
     # Parameters
     # ----------
     # event: Hash, required
@@ -15,24 +14,15 @@ class LambdaHandler
     #     Lambda Context runtime methods and attributes
     #     Context doc: https://docs.aws.amazon.com/lambda/latest/dg/ruby-context.html
 
-    # Returns
-    # ------
-    # API Gateway Lambda Proxy Output Format: dict
-    #     'statusCode' and 'body' are required
-    #     # api-gateway-simple-proxy-for-lambda-output-format
-    #     Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-
-    # begin
-    #   response = HTTParty.get('http://checkip.amazonaws.com/')
-    # rescue HTTParty::Error => error
-    #   puts error.inspect
-    #   raise error
-    # end
+    # Loads configurantion file
+    Config::Application.load
 
     {
       statusCode: 200,
       body: {
         message: "Hello World!",
+        context: context,
+        event: event
         # location: response.body
       }.to_json
     }

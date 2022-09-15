@@ -1,6 +1,6 @@
-FROM public.ecr.aws/lambda/ruby:2.7
+FROM public.ecr.aws/lambda/ruby:2.7 as final
 
-# Install system dependencies
+# Install system build dependencies
 RUN yum install -y make
 RUN yum install -y gcc
 RUN yum install -y amazon-linux-extras
@@ -14,10 +14,10 @@ ADD ${LAYER_FOLDER}/Gemfile .
 RUN bundle install
 
 # ADD functions functions
-ADD ${LAYER_FOLDER} ${LAYER_FOLDER}
+ADD ${LAYER_FOLDER} ./
 
 ARG FUNCTION_FOLDER=functions
-ADD ${FUNCTION_FOLDER} .
+ADD ${FUNCTION_FOLDER} ./
 
 RUN mkdir /opt/ruby && cd /opt/ruby && ln -s ./${LAYER_FOLDER} lib
 

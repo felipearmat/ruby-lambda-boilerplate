@@ -17,16 +17,16 @@ Globals:
       - !Ref ProcessorLibLayerDev
     DeadLetterQueue:
       Type: SQS
-      TargetArn: !Sub arn:aws:sqs:${AWS::Region}:${LAMBDA_ID}:ProcessorDeadLetterQueue
+      TargetArn: !Sub arn:aws:sqs:${AWS::Region}:${LAMBDA_ID}:${LambdaName}DeadLetterQueue
     Environment:
       Variables:
-        STACK_NAME: BaseProcessorDev
         S3_BUCKET: s3-bucket
         S3_PREFIX: s3-prefix
-        REPORT_GROUP: processor-coverage-report-dev
+        ENVIRONMENT: "local"
+        STACK_NAME: BaseProcessorDev
         LAMBDA_GID: a0a0a0a0
         LAMBDA_ID: 000000000000
-        ENVIRONMENT: "local"
+        REPORT_GROUP: processor-coverage-report-dev
         PROCESSOR_URL: !Sub "https://${LAMBDA_GID}.execute-api.${AWS::Region}.amazonaws.com/"
         PROCESSOR_USERNAME: "USERNAME"
         PROCESSOR_PASSWORD: "PASSWORD"
@@ -48,6 +48,7 @@ Resources:
     Properties:
       PackageType: Image
       Role: !GetAtt GenericFunctionDev.Role
+      # Role: !Sub "arn:aws:iam::${LAMBDA_ID}:role/${STACK_NAME}Role"
     Metadata:
       DockerTag: base_processor
       DockerContext: ./
